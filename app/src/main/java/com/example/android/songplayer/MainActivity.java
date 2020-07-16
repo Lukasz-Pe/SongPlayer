@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
 
@@ -55,13 +56,20 @@ public class MainActivity extends AppCompatActivity {
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
                                 mp.getDuration())));
         seekBar.setProgress(mp.getCurrentPosition());
-        mp.setLooping(true);
+        mp.setLooping(false);
         myHandle.postDelayed(updateSongTime,100);
     }
     public void play_pause(){
         if(!mp.isPlaying()){
             mp.start();
             play_pause_btn.setText("\u23F8");
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    Toast tost = Toast.makeText(getApplicationContext(), "Kuniec!", Toast.LENGTH_SHORT);
+                    tost.show();
+                }
+            });
         }else{
             mp.pause();
             play_pause_btn.setText("\u25B6");
